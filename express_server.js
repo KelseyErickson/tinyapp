@@ -8,6 +8,21 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 
+function generateRandomString(){
+  const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+  let randomShortURL = '';
+  
+  for(let i = 0; i <= 6; i++){
+
+    randomShortURL += availableChars.charAt(Math.floor(Math.random() * 62));
+  }
+  
+  return randomShortURL;
+  
+
+}
+
+
 const urlDatabase = {
 
   'b2xVn2': 'http://www.lighthouselabs.ca',
@@ -44,7 +59,7 @@ app.get('/urls/new', (req, res) => {
 
 });
 
-app.post('/urls', (req, res) => {
+app.post ('/urls', (req, res) => {
   console.log(req.body);
   res.send('OK')
 
@@ -64,4 +79,5 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 
 });
+
 

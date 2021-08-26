@@ -12,8 +12,7 @@ function generateRandomString(){
   const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
   let randomShortURL = '';
   
-  for(let i = 0; i <= 6; i++){
-
+  for(let i = 0; i < 6; i++){
     randomShortURL += availableChars.charAt(Math.floor(Math.random() * 62));
   }
   
@@ -60,8 +59,9 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.post ('/urls', (req, res) => {
-  console.log(req.body);
-  res.send('OK')
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL;
+  
 
 })
 
@@ -79,5 +79,7 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 
 });
+
+
 
 

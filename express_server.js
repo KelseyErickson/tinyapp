@@ -65,6 +65,7 @@ app.get('/urls/new', (req, res) => {
   };
   res.render("urls_new", templateVars);
 
+
 });
 
 app.post ('/urls', (req, res) => {
@@ -88,6 +89,12 @@ app.get('/urls/:shortURL', (req, res) => {
 app.get('/u/:shortURL', (req, res) => {
 
   const longURL = urlDatabase[req.params.shortURL]
+  console.log(req.params.shortURL)
+  
+  if(!longURL) {
+    res.send('Error: That shortURL does not exist');
+    return;
+  }
 
   res.redirect(longURL);
 

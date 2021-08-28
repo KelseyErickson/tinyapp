@@ -10,18 +10,18 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 
-function generateRandomString(){
-  const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+const generateRandomString = () => {
+  const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   let randomShortURL = '';
   
-  for(let i = 0; i < 6; i++){
+  for (let i = 0; i < 6; i++) {
     randomShortURL += availableChars.charAt(Math.floor(Math.random() * 62));
   }
   
   return randomShortURL;
   
 
-}
+};
 
 
 const urlDatabase = {
@@ -45,13 +45,13 @@ app.get('/urls.json', (req, res) => {
 
 app.get('/hello', (req, res) => {
 
-  res.send('<html><body>Hello <b>World</b></body></html>\n')
+  res.send('<html><body>Hello <b>World</b></body></html>\n');
 
 });
 
 app.get('/urls', (req, res) => {
-  const templateVars = { 
-    urls: urlDatabase, 
+  const templateVars = {
+    urls: urlDatabase,
     username: req.cookies["username"],
   };
   
@@ -61,26 +61,26 @@ app.get('/urls', (req, res) => {
 
 app.get('/urls/new', (req, res) => {
   const templateVars = {
-    username: req.cookies["username"] 
+    username: req.cookies["username"]
   };
   res.render("urls_new", templateVars);
 
 
 });
 
-app.post ('/urls', (req, res) => {
+app.post('/urls', (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
   
 
-})
+});
 
 app.get('/urls/:shortURL', (req, res) => {
-  const templateVars = { 
-    shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL], 
-    username: req.cookies["username"] 
+  const templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
+    username: req.cookies["username"]
   };
 
   res.render("urls_show", templateVars);
@@ -88,10 +88,10 @@ app.get('/urls/:shortURL', (req, res) => {
 
 app.get('/u/:shortURL', (req, res) => {
 
-  const longURL = urlDatabase[req.params.shortURL]
-  console.log(req.params.shortURL)
-  
-  if(!longURL) {
+  const longURL = urlDatabase[req.params.shortURL];
+  console.log(req.params.shortURL);
+
+  if (!longURL) {
     res.send('Error: That shortURL does not exist');
     return;
   }
@@ -110,21 +110,21 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 app.post('/urls/:shortURL', (req, res) => {
   
   urlDatabase[req.params.shortURL] = req.body.longURL;
-  res.redirect(`/urls`)
+  res.redirect(`/urls`);
 
 });
 
 app.post('/login', (req, res) => {
 
-  res.cookie('username', req.body.username)
-  res.redirect(`/urls`)
+  res.cookie('username', req.body.username);
+  res.redirect(`/urls`);
 
 });
 
 app.post('/logout', (req, res) => {
 
   res.clearCookie('username', req.body.username);
-  res.redirect(`/urls`)
+  res.redirect(`/urls`);
   
 });
 

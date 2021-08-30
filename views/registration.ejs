@@ -2,25 +2,39 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
   <title>Register</title>
+
 </head>
 
 <body>
-  <div class="mb-3">
-    <h3>Register</h3>
-    <form action="/urls/register" method="POST">
-      <label for="email" class="form-contorl">Email: </label><input type="email" name="email"
-        style="width: 300px; margin: 2em;">
-      <div>
-        <label for="password">Password: </label><input type="password" name="password"
-          style="width: 300px; margin: 2em;">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-  </div>
-  </form>
+  <div class="card">
+    <div class="card-header">
+      <h4>Register</h4>
+    </div>
+    <div class="form-group">
+
+      <form action="/urls/register" method="POST">
+
+        <div>
+          <label for="email">Email Address: </label><input type="email" name="email" placeholder="Email"
+            style="width: 300px; margin: 2em;">
+        </div>
+        <div>
+          <label for="password">Password: </label><input type="password" name="password" placeholder="Password"
+            style="width: 300px; margin-left: 4em;">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form>
+    </div>
+
+
 
 </body>
 

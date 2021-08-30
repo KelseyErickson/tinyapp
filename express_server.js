@@ -150,7 +150,22 @@ app.get('/register', (req, res) => {
   res.render('registration');
 });
 
+app.post('/register', (req, res) => {
+  const userRandomID = generateRandomString();
 
+  users[userRandomID]= {
+    
+    id: userRandomID, 
+    email: req.body.email, 
+    password: req.body.password
+    
+    
+
+  };
+  
+  res.redirect(`/urls`);
+
+});
 
 
 app.listen(PORT, () => {

@@ -9,9 +9,11 @@
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
-      <% if(username){ %>
+      
+      <% if(userInfo.email){ %>
+        
         <form class="form-inline ml-auto" action="/logout" method="POST">
-          <h5>Logged in as: <%= username %> </h5>
+          <h5>Logged in as: <%= userInfo.email %> </h5>
           <button type="submit" class="btn btn-outline-dark" style= "margin: 1em;">Logout</button>
         </form>
       <% } else{ %> 

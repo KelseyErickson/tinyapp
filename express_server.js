@@ -130,7 +130,7 @@ app.post('/logout', (req, res) => {
 
 app.get('/register', (req, res) => {
 
-  res.render('registration.ejs');
+  res.render('registration');
 });
 
 

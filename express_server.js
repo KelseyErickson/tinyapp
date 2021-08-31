@@ -163,6 +163,12 @@ app.post('/register', (req, res) => {
 
   };
 
+  if(!req.body.email || !req.body.email ){
+
+    res.status(400).send('Error: Cannot have empty email or password');
+  }
+
+  console.log(req.header)
   res.cookie('user_id', userRandomID);
 
 

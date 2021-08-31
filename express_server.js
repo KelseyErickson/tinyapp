@@ -180,8 +180,11 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
+  const templateVars = {
+    userInfo: users[req.cookies['user_id']]
+  };
 
-  res.render('registration');
+  res.render('registration', templateVars);
 });
 
 app.post('/register', (req, res) => {
@@ -221,8 +224,10 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-
-  res.render('login_form');
+  const templateVars = {
+    userInfo: users[req.cookies['user_id']]
+  };
+  res.render('login_form', templateVars);
 
 });
 

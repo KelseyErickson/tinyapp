@@ -10,7 +10,7 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
       
-      <% if(userInfo.email){ %>
+      <% if(userInfo){ %>
         
         <form class="form-inline ml-auto" action="/logout" method="POST">
           <h5>Logged in as: <%= userInfo.email %> </h5>

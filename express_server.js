@@ -151,18 +151,19 @@ app.post('/login', (req, res) => {
     return;
 
   } else {
+
     for (const user in users) {
       if (users[user]['email'] === req.body.email) {
         if (req.body.password === users[user]['password']) {
           res.cookie('user_id', users[user]['id']);
           res.redirect('/urls')
-        }
+        } else {
+          res.status(403).send('Error: Password is not correct');
 
+        }
 
       }
     }
-
-
 
   }
 

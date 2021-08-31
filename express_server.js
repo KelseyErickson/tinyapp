@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 
@@ -13,19 +13,19 @@ app.set('view engine', 'ejs');
 const generateRandomString = () => {
   const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   let randomShortURL = '';
-  
+
   for (let i = 0; i < 6; i++) {
     randomShortURL += availableChars.charAt(Math.floor(Math.random() * 62));
   }
-  
+
   return randomShortURL;
-  
+
 
 };
 
 const isUserRegistered = (users, email) => {
-  for(const user in users){
-    if(users[user]['email'] === email ){
+  for (const user in users) {
+    if (users[user]['email'] === email) {
 
       return true;
     }
@@ -33,7 +33,7 @@ const isUserRegistered = (users, email) => {
   }
 
   return false;
-  
+
 };
 
 
@@ -45,18 +45,18 @@ const urlDatabase = {
 
 const users = {
 
-    "userRandomID": {
+  "userRandomID": {
 
-      id: "userRandomID",
-      email:"user@example.com",
-      password: "purple-monkey-dinosaur"
-    }, 
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
 
-    "user2RandomID": {
-      id: "user2RandomID", 
-      email: "user2@example.com", 
-      password: "dishwasher-funk"
-    }
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
 
 };
 
@@ -80,12 +80,12 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  
+
   const templateVars = {
     urls: urlDatabase,
     userInfo: users[req.cookies['user_id']]
   };
-  
+
   res.render('urls_index', templateVars);
 
 });
@@ -103,7 +103,7 @@ app.post('/urls', (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
-  
+
 
 });
 
@@ -131,14 +131,14 @@ app.get('/u/:shortURL', (req, res) => {
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  
+
   delete urlDatabase[req.params.shortURL];
   res.redirect('/urls');
 
 });
 
 app.post('/urls/:shortURL', (req, res) => {
-  
+
   urlDatabase[req.params.shortURL] = req.body.longURL;
   res.redirect(`/urls`);
 
@@ -146,8 +146,26 @@ app.post('/urls/:shortURL', (req, res) => {
 
 app.post('/login', (req, res) => {
 
-  res.cookie('username', req.body.username);
-  res.redirect(`/urls`);
+  if (!isUserRegistered(users, req.body.email)) {
+    res.status(403).send('Error: This email does not exist');
+    return;
+
+  } else {
+    for (const user in users) {
+      if (users[user]['email'] === req.body.email) {
+        if (req.body.password === users[user]['password']) {
+          res.cookie('user_id', users[user]['id']);
+          res.redirect('/urls')
+        }
+
+
+      }
+    }
+
+
+
+  }
+
 
 });
 
@@ -155,7 +173,7 @@ app.post('/logout', (req, res) => {
 
   res.clearCookie('username', req.body.username);
   res.redirect(`/urls`);
-  
+
 });
 
 app.get('/register', (req, res) => {
@@ -167,35 +185,35 @@ app.post('/register', (req, res) => {
 
   const userRandomID = generateRandomString();
 
-  if(!req.body.email || !req.body.password ){
+  if (!req.body.email || !req.body.password) {
 
     res.status(400).send('Error: Cannot have empty email or password');
     return;
   }
 
-  if(isUserRegistered(users, req.body.email)){
+  if (isUserRegistered(users, req.body.email)) {
     res.status(400).send('Error: Email Already Registered');
-    
+
     return;
 
   } else {
 
-  users[userRandomID]= {
-    
-    id: userRandomID, 
-    email: req.body.email, 
-    password: req.body.password
-    
-  };
+    users[userRandomID] = {
 
-  if(!req.body.email || !req.body.email ){
+      id: userRandomID,
+      email: req.body.email,
+      password: req.body.password
 
-    res.status(400).send('Error: Cannot have empty email or password');
+    };
+
+    if (!req.body.email || !req.body.email) {
+
+      res.status(400).send('Error: Cannot have empty email or password');
+    }
+    res.cookie('user_id', userRandomID);
+
+    res.redirect(`/urls`);
   }
-  res.cookie('user_id', userRandomID);
-
-  res.redirect(`/urls`);
-}
 
 });
 

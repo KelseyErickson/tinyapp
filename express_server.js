@@ -23,6 +23,20 @@ const generateRandomString = () => {
 
 };
 
+const isUserRegistered = (users, email) => {
+  for(const user in users){
+    console.log(users[user]['email'], email)
+    if(users[user]['email'] === email ){
+
+      return true;
+    }
+
+  }
+
+  return false;
+  
+};
+
 
 const urlDatabase = {
 
@@ -151,7 +165,21 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
+
   const userRandomID = generateRandomString();
+
+  if(!req.body.email || !req.body.password ){
+
+    res.status(400).send('Error: Cannot have empty email or password');
+    return;
+  }
+
+  if(isUserRegistered(users, req.body.email)){
+    res.status(400).send('Error: Email Already Registered');
+    console.log(users)
+    return;
+
+  } else {
 
   users[userRandomID]= {
     
@@ -159,21 +187,18 @@ app.post('/register', (req, res) => {
     email: req.body.email, 
     password: req.body.password
     
-    
-
   };
 
   if(!req.body.email || !req.body.email ){
 
     res.status(400).send('Error: Cannot have empty email or password');
   }
-
-  console.log(req.header)
   res.cookie('user_id', userRandomID);
 
-
+  console.log(users)
   
   res.redirect(`/urls`);
+}
 
 });
 

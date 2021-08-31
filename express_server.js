@@ -79,6 +79,8 @@ app.get('/hello', (req, res) => {
 
 });
 
+
+// List of created urls
 app.get('/urls', (req, res) => {
 
   const templateVars = {
@@ -90,6 +92,16 @@ app.get('/urls', (req, res) => {
 
 });
 
+// To add new url to list once created
+app.post('/urls', (req, res) => {
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL;
+  res.redirect(`/urls/${shortURL}`);
+
+
+});
+
+// To create new url
 app.get('/urls/new', (req, res) => {
   const templateVars = {
     userInfo: users[req.cookies['user_id']]
@@ -99,14 +111,7 @@ app.get('/urls/new', (req, res) => {
 
 });
 
-app.post('/urls', (req, res) => {
-  const shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
-  res.redirect(`/urls/${shortURL}`);
-
-
-});
-
+// Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
@@ -117,6 +122,15 @@ app.get('/urls/:shortURL', (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+// Adds ability to edit the longURL associated with the short URL
+app.post('/urls/:shortURL', (req, res) => {
+
+  urlDatabase[req.params.shortURL] = req.body.longURL;
+  res.redirect(`/urls`);
+
+});
+
+// clicking on shortURL shoud lead to longURL website unless it does not exist 
 app.get('/u/:shortURL', (req, res) => {
 
   const longURL = urlDatabase[req.params.shortURL];
@@ -130,20 +144,24 @@ app.get('/u/:shortURL', (req, res) => {
 
 });
 
+// Removes a shortURL
 app.post('/urls/:shortURL/delete', (req, res) => {
 
   delete urlDatabase[req.params.shortURL];
   res.redirect('/urls');
 
 });
-
-app.post('/urls/:shortURL', (req, res) => {
-
-  urlDatabase[req.params.shortURL] = req.body.longURL;
-  res.redirect(`/urls`);
+ 
+// Render Login Page
+app.get('/login', (req, res) => {
+  const templateVars = {
+    userInfo: users[req.cookies['user_id']]
+  };
+  res.render('login_form', templateVars);
 
 });
 
+// Login 
 app.post('/login', (req, res) => {
 
   if (!isUserRegistered(users, req.body.email)) {
@@ -170,15 +188,16 @@ app.post('/login', (req, res) => {
 
 });
 
+// Logout
 app.post('/logout', (req, res) => {
-
-  
 
   res.clearCookie('user_id');
   res.redirect(`/urls`);
 
 });
 
+
+// Rendering register page
 app.get('/register', (req, res) => {
   const templateVars = {
     userInfo: users[req.cookies['user_id']]
@@ -187,6 +206,7 @@ app.get('/register', (req, res) => {
   res.render('registration', templateVars);
 });
 
+// Register
 app.post('/register', (req, res) => {
 
   const userRandomID = generateRandomString();
@@ -222,15 +242,6 @@ app.post('/register', (req, res) => {
   }
 
 });
-
-app.get('/login', (req, res) => {
-  const templateVars = {
-    userInfo: users[req.cookies['user_id']]
-  };
-  res.render('login_form', templateVars);
-
-});
-
 
 
 app.listen(PORT, () => {

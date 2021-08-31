@@ -25,7 +25,6 @@ const generateRandomString = () => {
 
 const isUserRegistered = (users, email) => {
   for(const user in users){
-    console.log(users[user]['email'], email)
     if(users[user]['email'] === email ){
 
       return true;
@@ -176,7 +175,7 @@ app.post('/register', (req, res) => {
 
   if(isUserRegistered(users, req.body.email)){
     res.status(400).send('Error: Email Already Registered');
-    console.log(users)
+    
     return;
 
   } else {
@@ -195,8 +194,6 @@ app.post('/register', (req, res) => {
   }
   res.cookie('user_id', userRandomID);
 
-  console.log(users)
-  
   res.redirect(`/urls`);
 }
 

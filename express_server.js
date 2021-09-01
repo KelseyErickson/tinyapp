@@ -126,9 +126,10 @@ app.get('/urls/new', (req, res) => {
 app.get('/urls/:shortURL', (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL],
+    longURL: urlDatabase[req.params.shortURL].longURL,
     userInfo: users[req.cookies['user_id']]
   };
+
 
   res.render("urls_show", templateVars);
 });
@@ -136,7 +137,7 @@ app.get('/urls/:shortURL', (req, res) => {
 // Adds ability to edit the longURL associated with the short URL
 app.post('/urls/:shortURL', (req, res) => {
 
-  urlDatabase[req.params.shortURL] = req.body.longURL;
+  longURL: urlDatabase[req.params.shortURL].longURL = req.body.longURL;
   res.redirect(`/urls`);
 
 });
@@ -144,7 +145,7 @@ app.post('/urls/:shortURL', (req, res) => {
 // clicking on shortURL shoud lead to longURL website unless it does not exist 
 app.get('/u/:shortURL', (req, res) => {
 
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL;
 
   if (!longURL) {
     res.status(404).send('Error: That shortURL does not exist');

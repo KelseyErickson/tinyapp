@@ -23,16 +23,17 @@ const generateRandomString = () => {
 
 };
 
-const isUserRegistered = (users, email) => {
+const getUserByEmail = (email) => {
   for (const user in users) {
-    if (users[user]['email'] === email) {
+    const user = users[user];
+    if (user['email'] === email) {
 
-      return true;
+      return user;
     }
 
   }
 
-  return false;
+  return null;
 
 };
 

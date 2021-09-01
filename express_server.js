@@ -24,9 +24,9 @@ const generateRandomString = () => {
 };
 
 const getUserByEmail = (email) => {
-  for (const user in users) {
-    const user = users[user];
-    if (user['email'] === email) {
+  for (const id in users) {
+    const user = users[id];
+    if (user.email === email) {
 
       return user;
     }
@@ -165,7 +165,7 @@ app.get('/login', (req, res) => {
 // Login 
 app.post('/login', (req, res) => {
 
-  if (!isUserRegistered(users, req.body.email)) {
+  if (!isUserRegistered(req.body.email)) {
     res.status(403).send('Error: This email does not exist');
     return;
 
@@ -211,19 +211,22 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
 
   const userRandomID = generateRandomString();
+  const email = req.body.email;
+  const password = req.body.password;
 
-  if (!req.body.email || !req.body.password) {
+  if (!email || !password) {
 
     res.status(400).send('Error: Cannot have empty email or password');
     return;
   }
 
-  if (isUserRegistered(users, req.body.email)) {
-    res.status(400).send('Error: Email Already Registered');
+  const user = getUserByEmail(email);
 
+  if (user) {
+    res.status(400).send('Error: Email Already Registered');
     return;
 
-  } else {
+  }
 
     users[userRandomID] = {
 
@@ -233,14 +236,11 @@ app.post('/register', (req, res) => {
 
     };
 
-    if (!req.body.email || !req.body.email) {
 
-      res.status(400).send('Error: Cannot have empty email or password');
-    }
     res.cookie('user_id', userRandomID);
 
     res.redirect(`/urls`);
-  }
+  
 
 });
 

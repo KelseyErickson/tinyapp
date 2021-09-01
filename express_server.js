@@ -95,6 +95,7 @@ app.get('/urls', (req, res) => {
 
 // To add new url to list once created
 app.post('/urls', (req, res) => {
+
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
@@ -107,6 +108,12 @@ app.get('/urls/new', (req, res) => {
   const templateVars = {
     userInfo: users[req.cookies['user_id']]
   };
+
+  if(!req.cookies['user_id']){
+
+    res.redirect('/login')
+  }
+  
   res.render("urls_new", templateVars);
 
 

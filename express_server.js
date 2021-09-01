@@ -124,16 +124,9 @@ app.get('/urls/new', (req, res) => {
 
 // Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
-  
-  if(urlDatabase[req.params.shortURL]){
-    const longURL = urlDatabase[req.params.shortURL].longURL
-  }
-
-  longURL = null
-
   const templateVars = {
     shortURL: req.params.shortURL,
-    longURL,
+    longURL: urlDatabase[req.params.shortURL].longURL,
     userInfo: users[req.cookies['user_id']]
   };
 
@@ -152,7 +145,7 @@ app.post('/urls/:shortURL', (req, res) => {
 // clicking on shortURL shoud lead to longURL website unless it does not exist 
 app.get('/u/:shortURL', (req, res) => {
 
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL;
   
   if (!longURL) {
     res.status(404).send('Error: That shortURL does not exist');

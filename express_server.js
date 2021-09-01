@@ -152,7 +152,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   res.redirect('/urls');
 
 });
- 
+
 // Render Login Page
 app.get('/login', (req, res) => {
   const templateVars = {
@@ -164,27 +164,32 @@ app.get('/login', (req, res) => {
 
 // Login 
 app.post('/login', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const user = getUserByEmail(email);
 
-  if (!isUserRegistered(req.body.email)) {
+  if (!email || !password) {
+
+    res.status(400).send('Error: Cannot have empty email or password');
+    return;
+  }
+
+
+  if (!user) {
     res.status(403).send('Error: This email does not exist');
     return;
 
-  } else {
-
-    for (const user in users) {
-      if (users[user]['email'] === req.body.email) {
-        if (req.body.password === users[user]['password']) {
-          res.cookie('user_id', users[user]['id']);
-          res.redirect('/urls')
-        } else {
-          res.status(403).send('Error: Password is not correct');
-
-        }
-
-      }
-    }
-
   }
+
+
+  if (user.password !== password) {
+
+    return res.status(403).send('Error: Incorrect Password');
+  }
+
+
+  res.cookie('user_id', user.id);
+  res.redirect('/urls')
 
 
 });
@@ -228,19 +233,19 @@ app.post('/register', (req, res) => {
 
   }
 
-    users[userRandomID] = {
+  users[userRandomID] = {
 
-      id: userRandomID,
-      email: req.body.email,
-      password: req.body.password
+    id: userRandomID,
+    email: req.body.email,
+    password: req.body.password
 
-    };
+  };
 
 
-    res.cookie('user_id', userRandomID);
+  res.cookie('user_id', userRandomID);
 
-    res.redirect(`/urls`);
-  
+  res.redirect(`/urls`);
+
 
 });
 

@@ -106,8 +106,10 @@ app.get('/hello', (req, res) => {
 // List of created urls
 app.get('/urls', (req, res) => {
   const user_id = req.cookies['user_id'];
+
   if(!user_id){
     res.send('Please login or register to view this page')
+    return;
   }
 
   const userUrlDatabase = urlsForUser(user_id);
@@ -153,13 +155,22 @@ app.get('/urls/new', (req, res) => {
 
 // Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
+
+  const user_id = req.cookies['user_id'];
+
+
+  if(!(user_id === urlDatabase[req.params.shortURL].userID)){
+    res.send('Please login or register to view this page')
+    return;
+    
+  }
+
   const templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
-    userInfo: users[req.cookies['user_id']]
+    userInfo: users[user_id]
   };
 
-  console.log(templateVars)
   res.render("urls_show", templateVars);
 });
 

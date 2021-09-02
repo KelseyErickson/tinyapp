@@ -246,11 +246,11 @@ app.post('/login', (req, res) => {
   }
 
 
-  if (user.password !== password) {
+  if (!bcrypt.compareSync(password, user.password)) {
 
     return res.status(403).send('Error: Incorrect Password');
   }
-
+  
 
   res.cookie('user_id', user.id);
   res.redirect('/urls')

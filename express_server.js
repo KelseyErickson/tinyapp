@@ -4,6 +4,7 @@ const PORT = 8080; //default port 8080
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
+const getUserByEmail = require('./helpers')
 
 
 app.use(cookieSession({
@@ -26,20 +27,6 @@ const generateRandomString = () => {
 
   return randomShortURL;
 
-
-};
-
-const getUserByEmail = (email, database) => {
-  for (const id in database) {
-    const user = database[id];
-    if (user.email === email) {
-
-      return user;
-    }
-
-  }
-
-  return null;
 
 };
 

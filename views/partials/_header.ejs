@@ -12,14 +12,16 @@
       
       <% if(userInfo){ %>
         
-        <form class="form-inline ml-auto" action="/logout" method="POST">
+        <form class="form-inline" action="/logout" method="POST">
           <h5>Logged in as: <%= userInfo.email %> </h5>
           <button type="submit" class="btn btn-outline-dark" style= "margin: 1em;">Logout</button>
         </form>
       <% } else{ %> 
-        <a class='ml-auto' style='padding-right: 1em;' href="/login">Login</a>
-        <a href="/register">Register</a>
+        <div class="ml-auto navbar-nav">
+        <a class='nav-item nav-link' style='padding-right: 1em;' href="/login">Login</a>
+        <a class='nav-item nav-link' href="/register">Register</a>
      <% } %>
+    </div>
       
     </div>
   </nav>

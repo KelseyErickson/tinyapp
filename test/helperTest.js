@@ -26,5 +26,15 @@ describe('getUserByEmail', function () {
 
   });
 
+  it('should return a undefined with a invalid email', function() {
+
+    const user =  getUserByEmail('notRegisteredUser@example.com', testUsers);
+    const expectedOutput = undefined;
+
+    assert.equal(user, expectedOutput);
+
+  });
+
+
 
 });

@@ -177,6 +177,11 @@ app.get('/urls/:shortURL', (req, res) => {
 // Adds ability to edit the longURL associated with the short URL
 app.post('/urls/:shortURL', (req, res) => {
 
+  if(!(req.cookies['user_id'] === urlDatabase[req.params.shortURL].userID)){
+
+    res.send('Access Denied')
+  }
+
   urlDatabase[req.params.shortURL].longURL = req.body.longURL;
   res.redirect(`/urls`);
 
@@ -198,6 +203,11 @@ app.get('/u/:shortURL', (req, res) => {
 
 // Removes a shortURL
 app.post('/urls/:shortURL/delete', (req, res) => {
+
+  if(!(req.cookies['user_id'] === urlDatabase[req.params.shortURL].userID)){
+
+    res.send('Access Denied')
+  }
 
   delete urlDatabase[req.params.shortURL];
   res.redirect('/urls');

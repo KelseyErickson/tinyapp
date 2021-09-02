@@ -2,11 +2,14 @@ const express = require('express');
 const app = express();
 const PORT = 8080; //default port 8080
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 
 
-app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -108,7 +111,7 @@ app.get('/hello', (req, res) => {
 
 // List of created urls
 app.get('/urls', (req, res) => {
-  const user_id = req.cookies['user_id'];
+  const user_id = req.session.user_id;
 
   if(!user_id){
     res.send('Please login or register to view this page')
@@ -132,7 +135,7 @@ app.post('/urls', (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = { 
     longURL: req.body.longURL, 
-    userID: req.cookies['user_id']
+    userID: req.session.user_id
   }
 
   res.redirect(`/urls/${shortURL}`);
@@ -143,10 +146,10 @@ app.post('/urls', (req, res) => {
 // To create new url
 app.get('/urls/new', (req, res) => {
   const templateVars = {
-    userInfo: users[req.cookies['user_id']]
+    userInfo: users[req.session.user_id]
   };
 
-  if(!req.cookies['user_id']){
+  if(!req.session.user_id){
 
     res.redirect('/login')
   }
@@ -159,7 +162,7 @@ app.get('/urls/new', (req, res) => {
 // Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
 
-  const user_id = req.cookies['user_id'];
+  const user_id = req.session.user_id;
 
 
   if(!(user_id === urlDatabase[req.params.shortURL].userID)){
@@ -180,7 +183,7 @@ app.get('/urls/:shortURL', (req, res) => {
 // Adds ability to edit the longURL associated with the short URL
 app.post('/urls/:shortURL', (req, res) => {
 
-  if(!(req.cookies['user_id'] === urlDatabase[req.params.shortURL].userID)){
+  if(!(req.session.user_id === urlDatabase[req.params.shortURL].userID)){
 
     res.send('Access Denied')
   }
@@ -193,12 +196,13 @@ app.post('/urls/:shortURL', (req, res) => {
 // clicking on shortURL shoud lead to longURL website unless it does not exist 
 app.get('/u/:shortURL', (req, res) => {
 
-  const longURL = urlDatabase[req.params.shortURL].longURL;
-  
-  if (!longURL) {
+
+  if (!urlDatabase[req.params.shortURL]) {
     res.status(404).send('Error: That shortURL does not exist');
     return;
   }
+
+  const longURL = urlDatabase[req.params.shortURL].longURL;
 
   res.redirect(longURL);
 
@@ -207,7 +211,7 @@ app.get('/u/:shortURL', (req, res) => {
 // Removes a shortURL
 app.post('/urls/:shortURL/delete', (req, res) => {
 
-  if(!(req.cookies['user_id'] === urlDatabase[req.params.shortURL].userID)){
+  if(!(req.session.user_id === urlDatabase[req.params.shortURL].userID)){
 
     res.send('Access Denied')
   }
@@ -220,7 +224,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 // Render Login Page
 app.get('/login', (req, res) => {
   const templateVars = {
-    userInfo: users[req.cookies['user_id']]
+    userInfo: users[req.session.user_id]
   };
   res.render('login_form', templateVars);
 
@@ -252,7 +256,7 @@ app.post('/login', (req, res) => {
   }
   
 
-  res.cookie('user_id', user.id);
+  req.session.user_id = user.id;
   res.redirect('/urls')
 
 
@@ -261,7 +265,7 @@ app.post('/login', (req, res) => {
 // Logout
 app.post('/logout', (req, res) => {
 
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect(`/urls`);
 
 });
@@ -270,7 +274,7 @@ app.post('/logout', (req, res) => {
 // Rendering register page
 app.get('/register', (req, res) => {
   const templateVars = {
-    userInfo: users[req.cookies['user_id']]
+    userInfo: users[req.session.user_id]
   };
 
   res.render('registration', templateVars);
@@ -307,7 +311,7 @@ app.post('/register', (req, res) => {
   };
 
   
-  res.cookie('user_id', userRandomID);
+  req.session.user_id = userRandomID;
 
   res.redirect(`/urls`);
 

@@ -105,17 +105,17 @@ app.get('/hello', (req, res) => {
 
 // List of created urls
 app.get('/urls', (req, res) => {
-
-  if(!req.cookies['user_id']){
+  const user_id = req.cookies['user_id'];
+  if(!user_id){
     res.send('Please login or register to view this page')
   }
 
-  const userUrlDatabase = urlsForUser(req.cookies['user_id']);
+  const userUrlDatabase = urlsForUser(user_id);
   
 
   const templateVars = {
     urls: userUrlDatabase,
-    userInfo: users[req.cookies['user_id']]
+    userInfo: users[user_id]
   };
 
   res.render('urls_index', templateVars);

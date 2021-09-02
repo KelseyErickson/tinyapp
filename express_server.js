@@ -38,6 +38,8 @@ const getUserByEmail = (email) => {
 };
 
 
+
+
 const urlDatabase = {
 
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
@@ -46,9 +48,9 @@ const urlDatabase = {
 
 const users = {
 
-  "userRandomID": {
+  "aJ48lW": {
 
-    id: "userRandomID",
+    id: "aJ48lW",
     email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
@@ -59,7 +61,27 @@ const users = {
     password: "dishwasher-funk"
   }
 
+  
+
 };
+
+const urlsForUser = (id) => {
+  const userUrlDatabase = {};
+
+  for(const URL in urlDatabase){
+    const shortURL = urlDatabase[URL];
+    if(id === shortURL.userID){
+
+      userUrlDatabase[URL] = shortURL
+    }
+    
+  
+  }
+  return userUrlDatabase
+  
+}
+
+urlsForUser('aJ48lW');
 
 app.get('/', (req, res) => {
 
@@ -84,8 +106,15 @@ app.get('/hello', (req, res) => {
 // List of created urls
 app.get('/urls', (req, res) => {
 
+  if(!req.cookies['user_id']){
+    res.send('Please login or register to view this page')
+  }
+
+  const userUrlDatabase = urlsForUser(req.cookies['user_id']);
+  
+
   const templateVars = {
-    urls: urlDatabase,
+    urls: userUrlDatabase,
     userInfo: users[req.cookies['user_id']]
   };
 

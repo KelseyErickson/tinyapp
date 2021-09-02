@@ -29,9 +29,9 @@ const generateRandomString = () => {
 
 };
 
-const getUserByEmail = (email) => {
-  for (const id in users) {
-    const user = users[id];
+const getUserByEmail = (email, database) => {
+  for (const id in database) {
+    const user = database[id];
     if (user.email === email) {
 
       return user;
@@ -234,7 +234,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  const user = getUserByEmail(email);
+  const user = getUserByEmail(email, users);
 
   if (!email || !password) {
 
@@ -294,7 +294,7 @@ app.post('/register', (req, res) => {
     return;
   }
 
-  const user = getUserByEmail(email);
+  const user = getUserByEmail(email, users);
 
   if (user) {
     res.status(400).send('Error: Email Already Registered');

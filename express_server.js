@@ -112,31 +112,37 @@ app.get('/hello', (req, res) => {
 
 // List of created urls
 app.get('/urls', (req, res) => {
-  const user_id = req.session.user_id;
 
-  if (!user_id) {
+  const user_idCookie = req.session.user_id;
+
+  if (!user_idCookie) {
     res.send('Please login or register to view this page');
     return;
   }
 
-  const userUrlDatabase = urlsForUser(user_id);
+  const userUrlDatabase = urlsForUser(user_idCookie);
   
 
   const templateVars = {
+
     urls: userUrlDatabase,
-    userInfo: users[user_id]
+    userInfo: users[user_idCookie]
+
   };
 
   res.render('urls_index', templateVars);
 
 });
 
-// To add new url to list once created
+// Add new url to list once created
 app.post('/urls', (req, res) => {
+
   const shortURL = generateRandomString();
+  const user_idCookie = req.session.user_id;
+
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
-    userID: req.session.user_id
+    userID: user_idCookie
   };
 
   res.redirect(`/urls/${shortURL}`);
@@ -144,13 +150,15 @@ app.post('/urls', (req, res) => {
 
 });
 
-// To create new url
+// Render page to create new url
 app.get('/urls/new', (req, res) => {
+
+  const user_idCookie = req.session.user_id
   const templateVars = {
-    userInfo: users[req.session.user_id]
+    userInfo: users[user_idCookie]
   };
 
-  if (!req.session.user_id) {
+  if (!user_idCookie) {
 
     res.redirect('/login');
   }
@@ -163,33 +171,37 @@ app.get('/urls/new', (req, res) => {
 // Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
 
-  const user_id = req.session.user_id;
+  const user_idCookie = req.session.user_id;
+  const shortURL = req.params.shortURL;
 
-
-  if (!(user_id === urlDatabase[req.params.shortURL].userID)) {
+  if (!(user_idCookie === urlDatabase[shortURL].userID)) {
     res.send('Please login or register to view this page');
     return;
     
   }
 
   const templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL,
-    userInfo: users[user_id]
+    shortURL,
+    longURL: urlDatabase[shortURL].longURL,
+    userInfo: users[user_idCookie]
   };
 
   res.render("urls_show", templateVars);
+
 });
 
 // Adds ability to edit the longURL associated with the short URL
 app.post('/urls/:shortURL', (req, res) => {
 
-  if (!(req.session.user_id === urlDatabase[req.params.shortURL].userID)) {
+  const user_idCookie = req.session.user_id;
+  const shortURL = req.params.shortURL;
+
+  if (!(user_idCookie === urlDatabase[shortURL].userID)) {
 
     res.send('Access Denied');
   }
 
-  urlDatabase[req.params.shortURL].longURL = req.body.longURL;
+  urlDatabase[shortURL].longURL = req.body.longURL;
   res.redirect(`/urls`);
 
 });
@@ -197,13 +209,14 @@ app.post('/urls/:shortURL', (req, res) => {
 // ShortURL shoud lead to longURL website unless it does not exist
 app.get('/u/:shortURL', (req, res) => {
 
+  const shortURL = req.params.shortURL;
 
-  if (!urlDatabase[req.params.shortURL]) {
+  if (!urlDatabase[shortURL]) {
     res.status(404).send('Error: That shortURL does not exist');
     return;
   }
 
-  const longURL = urlDatabase[req.params.shortURL].longURL;
+  const longURL = urlDatabase[shortURL].longURL;
 
   res.redirect(longURL);
 
@@ -212,20 +225,26 @@ app.get('/u/:shortURL', (req, res) => {
 // Removes a shortURL
 app.post('/urls/:shortURL/delete', (req, res) => {
 
-  if (!(req.session.user_id === urlDatabase[req.params.shortURL].userID)) {
+  const user_idCookie = req.session.user_id;
+  const shortURL = req.params.shortURL;
+
+  if (!(user_idCookie === urlDatabase[shortURL].userID)) {
 
     res.send('Access Denied');
   }
 
-  delete urlDatabase[req.params.shortURL];
+  delete urlDatabase[shortURL];
   res.redirect('/urls');
 
 });
 
 // Render Login Page
 app.get('/login', (req, res) => {
+
+  const user_idCookie = req.session.user_id;
+
   const templateVars = {
-    userInfo: users[req.session.user_id]
+    userInfo: users[user_idCookie]
   };
   res.render('login_form', templateVars);
 
@@ -233,6 +252,7 @@ app.get('/login', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
+
   const email = req.body.email;
   const password = req.body.password;
   const user = getUserByEmail(email, users);
@@ -274,8 +294,11 @@ app.post('/logout', (req, res) => {
 
 // Rendering register page
 app.get('/register', (req, res) => {
+
+  const user_idCookie = req.session.user_id;
+
   const templateVars = {
-    userInfo: users[req.session.user_id]
+    userInfo: users[user_idCookie]
   };
 
   res.render('registration', templateVars);

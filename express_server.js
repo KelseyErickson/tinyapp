@@ -135,7 +135,7 @@ app.post('/urls', (req, res) => {
 // Render page to create new url
 app.get('/urls/new', (req, res) => {
 
-  const user_idCookie = req.session.user_id
+  const user_idCookie = req.session.user_id;
   const templateVars = {
     userInfo: users[user_idCookie]
   };

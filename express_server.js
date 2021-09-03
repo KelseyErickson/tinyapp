@@ -1,21 +1,62 @@
-const express = require('express');
-const app = express();
-const PORT = 8080; //default port 8080
-const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
-const bcrypt = require('bcrypt');
 const { getUserByEmail } = require('./helpers');
 
+// Express
+const express = require('express');
+const app = express();
 
+const PORT = 8080; //default port 8080
+
+// Body Parser
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// Cookie-Session
+const cookieSession = require('cookie-session');
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
 }));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// bcrypt
+const bcrypt = require('bcrypt');
 
+
+// Setting View Engine to ejs
 app.set('view engine', 'ejs');
 
+
+
+// Global Objects
+
+const urlDatabase = {
+
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
+
+};
+
+const users = {
+
+  "userRandomID": {
+
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+
+  
+
+};
+
+
+// Functions
 
 const generateRandomString = () => {
   const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -30,34 +71,6 @@ const generateRandomString = () => {
 
 };
 
-
-
-
-const urlDatabase = {
-
-  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
-  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
-
-};
-
-const users = {
-
-  "aJ48lW": {
-
-    id: "aJ48lW",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
-
-  "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  }
-
-  
-
-};
 
 const urlsForUser = (id) => {
   const userUrlDatabase = {};
@@ -75,8 +88,8 @@ const urlsForUser = (id) => {
   
 };
 
-urlsForUser('aJ48lW');
 
+// GET and POST Requests
 app.get('/', (req, res) => {
 
   res.send('Hello!');

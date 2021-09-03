@@ -31,8 +31,8 @@ app.set('view engine', 'ejs');
 
 const urlDatabase = {
 
-  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
-  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "userRandomID" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "userRandomID" }
 
 };
 
@@ -42,13 +42,14 @@ const users = {
 
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   },
 
   "user2RandomID": {
+    
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk", 10)
   }
 
   
@@ -90,25 +91,6 @@ const urlsForUser = (id) => {
 
 
 // GET and POST Requests
-app.get('/', (req, res) => {
-
-  res.send('Hello!');
-
-
-});
-
-app.get('/urls.json', (req, res) => {
-
-  res.json(urlDatabase);
-
-});
-
-app.get('/hello', (req, res) => {
-
-  res.send('<html><body>Hello <b>World</b></body></html>\n');
-
-});
-
 
 // List of created urls
 app.get('/urls', (req, res) => {

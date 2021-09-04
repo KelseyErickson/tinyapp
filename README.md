@@ -7,8 +7,9 @@ Just register or login to enjoy the TinyApp experiennce.
 
 ## Final Product
 
-!["screenshot description"](#)
-!["screenshot description"](#)
+!["Screenshot of URLs page"](https://raw.githubusercontent.com/KelseyErickson/tinyapp/master/docs/tinyApp-urlsPage.png)
+!["Screenshot of register page"](https://raw.githubusercontent.com/KelseyErickson/tinyapp/master/docs/tinyApp-register.png)
+!["Screenshot of edit page"](https://raw.githubusercontent.com/KelseyErickson/tinyapp/master/docs/tinyApp-edit.png)
 
 ## Dependencies
 

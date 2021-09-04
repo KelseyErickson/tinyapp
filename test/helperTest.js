@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 
-const { getUserByEmail, generateRandomString, urlsForUser} = require('../helpers');
+const { getUserByEmail, generateRandomString, urlsForUser } = require('../helpers');
 
 const testUsers = {
   "userRandomID": {
@@ -19,7 +19,7 @@ describe('getUserByEmail', function() {
 
   it('should return a user with a valid email', function() {
 
-    const user =  getUserByEmail('user@example.com', testUsers);
+    const user = getUserByEmail('user@example.com', testUsers);
     const expectedOutput = 'userRandomID';
 
     assert.equal(user.id, expectedOutput);
@@ -28,7 +28,7 @@ describe('getUserByEmail', function() {
 
   it('should return a undefined with a invalid email', function() {
 
-    const user =  getUserByEmail('notRegisteredUser@example.com', testUsers);
+    const user = getUserByEmail('notRegisteredUser@example.com', testUsers);
     const expectedOutput = undefined;
 
     assert.equal(user, expectedOutput);
@@ -37,48 +37,48 @@ describe('getUserByEmail', function() {
 
 });
 
-  describe('generateRandomString', function() {
+describe('generateRandomString', function() {
 
-    it('should return a string', function() {
-  
-     const randomString = generateRandomString();
-  
-    assert.equal(typeof(randomString), 'string');
-  
-    });
+  it('should return a string', function() {
 
-    it('should be six charaters long', function() {
-  
-      const randomString = generateRandomString();
-   
-      assert.equal(randomString.length, 6);
-   
-     });
-  
-     it('should not return lowercase characters in order', function() {
-  
-      const randomString = generateRandomString();
-   
-      assert.notEqual(randomString, 'abcdef');
-   
-     });
+    const randomString = generateRandomString();
 
-     it('should not return capital characters in order', function() {
-  
-      const randomString = generateRandomString();
-   
-      assert.notEqual(randomString, 'ABCDEF');
-   
-     });
+    assert.equal(typeof (randomString), 'string');
 
-     it('should not return numbers that are in order', function() {
-  
-      const randomString = generateRandomString();
-   
-      assert.notEqual(randomString, '123456');
-   
-     });
-    
+  });
+
+  it('should be six charaters long', function() {
+
+    const randomString = generateRandomString();
+
+    assert.equal(randomString.length, 6);
+
+  });
+
+  it('should not return lowercase characters in order', function() {
+
+    const randomString = generateRandomString();
+
+    assert.notEqual(randomString, 'abcdef');
+
+  });
+
+  it('should not return capital characters in order', function() {
+
+    const randomString = generateRandomString();
+
+    assert.notEqual(randomString, 'ABCDEF');
+
+  });
+
+  it('should not return numbers that are in order', function() {
+
+    const randomString = generateRandomString();
+
+    assert.notEqual(randomString, '123456');
+
+  });
+
 
 });
 
@@ -98,7 +98,7 @@ describe('urlsForUser', function() {
 
     const userUrlDatabase = urlsForUser('user2', testUrlDatabase);
 
-    assert.equal(typeof(userUrlDatabase), 'object');
+    assert.equal(typeof (userUrlDatabase), 'object');
 
   });
 
@@ -107,10 +107,10 @@ describe('urlsForUser', function() {
     const userUrlDatabase = urlsForUser('user2', testUrlDatabase);
 
     const expectedOutput = {
-      shortURL3: { longURL: "https://www.example.com", userID: "user2" }, 
+      shortURL3: { longURL: "https://www.example.com", userID: "user2" },
       shortURL5: { longURL: "https://www.lighthouselabs.ca/", userID: "user2" }
 
-    }
+    };
 
     assert.deepEqual(userUrlDatabase, expectedOutput);
 
@@ -122,25 +122,25 @@ describe('urlsForUser', function() {
     const userUrlDatabase = urlsForUser('user2', testUrlDatabase);
 
     const incorrectOutput = {
-      
-    shortURL3: { longURL: "https://www.example.com", userID: "user2" },
-    shortURL4: { longURL: "https://en.wikipedia.org", userID: "user3" },
-    shortURL5: { longURL: "https://www.lighthouselabs.ca/", userID: "user2" }
 
-    }
+      shortURL3: { longURL: "https://www.example.com", userID: "user2" },
+      shortURL4: { longURL: "https://en.wikipedia.org", userID: "user3" },
+      shortURL5: { longURL: "https://www.lighthouselabs.ca/", userID: "user2" }
+
+    };
 
     assert.notEqual(userUrlDatabase, incorrectOutput);
 
   });
 
 
-  
+
 
   it('should return an empty object if the user is not in database', function() {
 
     const userUrlDatabase = urlsForUser('user5', testUrlDatabase);
 
-  
+
     assert.deepEqual(userUrlDatabase, {});
 
   });

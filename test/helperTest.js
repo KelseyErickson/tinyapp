@@ -55,7 +55,7 @@ describe('generateRandomString', function() {
 
   });
 
-  it('should not return lowercase characters in order', function() {
+  it('should not return a string of lowercase characters in order', function() {
 
     const randomString = generateRandomString();
 
@@ -63,7 +63,7 @@ describe('generateRandomString', function() {
 
   });
 
-  it('should not return capital characters in order', function() {
+  it('should not return a string of capital characters in order', function() {
 
     const randomString = generateRandomString();
 
@@ -71,7 +71,7 @@ describe('generateRandomString', function() {
 
   });
 
-  it('should not return numbers that are in order', function() {
+  it('should not return a string of numbers that are in order', function() {
 
     const randomString = generateRandomString();
 

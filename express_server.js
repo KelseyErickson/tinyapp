@@ -1,4 +1,5 @@
-const { getUserByEmail } = require('./helpers');
+const { getUserByEmail, generateRandomString, urlsForUser } = require('./helpers');
+
 
 // Express
 const express = require('express');
@@ -57,39 +58,6 @@ const users = {
 };
 
 
-// Functions
-
-const generateRandomString = () => {
-  const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  let randomShortURL = '';
-
-  for (let i = 0; i < 6; i++) {
-    randomShortURL += availableChars.charAt(Math.floor(Math.random() * 62));
-  }
-
-  return randomShortURL;
-
-
-};
-
-
-const urlsForUser = (id) => {
-  const userUrlDatabase = {};
-
-  for (const URL in urlDatabase) {
-    const shortURL = urlDatabase[URL];
-    if (id === shortURL.userID) {
-
-      userUrlDatabase[URL] = shortURL;
-    }
-    
-  
-  }
-  return userUrlDatabase;
-  
-};
-
-
 // GET and POST Requests
 
 // List of created urls
@@ -102,9 +70,9 @@ app.get('/urls', (req, res) => {
     return;
   }
 
-  const userUrlDatabase = urlsForUser(user_idCookie);
+  const userUrlDatabase = urlsForUser(user_idCookie, urlDatabase);
   
-
+  console.log(userUrlDatabase)
   const templateVars = {
 
     urls: userUrlDatabase,

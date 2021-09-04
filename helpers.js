@@ -1,3 +1,5 @@
+// Find user in database with given an email and database
+// Return the user associated with the email or undefined if no user found
 const getUserByEmail = (email, database) => {
   for (const id in database) {
     const user = database[id];
@@ -12,6 +14,7 @@ const getUserByEmail = (email, database) => {
 
 };
 
+// Generate random alphanumeric string
 const generateRandomString = () => {
   const availableChars = '012345789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   let randomShortURL = '';
@@ -25,6 +28,8 @@ const generateRandomString = () => {
 
 };
 
+// Takes in an id and a database
+// Returns all items in the database associated with the id
 const urlsForUser = (id, database) => {
   const userUrlDatabase = {};
 

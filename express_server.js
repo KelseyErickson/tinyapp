@@ -72,7 +72,7 @@ app.get('/urls', (req, res) => {
 
   const userUrlDatabase = urlsForUser(user_idCookie, urlDatabase);
   
-  console.log(userUrlDatabase)
+  
   const templateVars = {
 
     urls: userUrlDatabase,
@@ -295,7 +295,7 @@ app.post('/register', (req, res) => {
 
 app.listen(PORT, () => {
 
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`App listening on port ${PORT}!`);
 
 });
 

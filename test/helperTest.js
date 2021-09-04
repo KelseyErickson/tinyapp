@@ -47,7 +47,7 @@ describe('generateRandomString', function() {
 
   });
 
-  it('should be six charaters long', function() {
+  it('should be six characters long', function() {
 
     const randomString = generateRandomString();
 
@@ -132,8 +132,6 @@ describe('urlsForUser', function() {
     assert.notEqual(userUrlDatabase, incorrectOutput);
 
   });
-
-
 
 
   it('should return an empty object if the user is not in database', function() {

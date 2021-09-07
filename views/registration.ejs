@@ -21,6 +21,10 @@
     <div class="card-header">
       <h4>Register</h4>
     </div>
+    <% if (message) { %>
+
+      <p style="color: red"><%= message %></p>
+      <% } %>
     <div class="form-group">
       <form action="/register" method="POST">
         <div>

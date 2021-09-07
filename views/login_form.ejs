@@ -21,6 +21,10 @@
     <div class="card-header">
       <h4>Login</h4>
     </div>
+    <% if (message) { %>
+
+      <p style="color: red"><%= message %></p>
+      <% } %>
     <div class="form-group">
       <form action="/login" method="POST">
         <div>

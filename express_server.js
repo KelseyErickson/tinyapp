@@ -60,6 +60,16 @@ const users = {
 
 // GET and POST Requests
 
+// Home Page
+
+app.get('/', (req, res) => {
+
+  res.redirect(`/urls`)
+
+
+});
+
+
 // List of created urls
 app.get('/urls', (req, res) => {
 

@@ -64,8 +64,13 @@ const users = {
 
 app.get('/', (req, res) => {
 
-  res.redirect(`/urls`)
+  const user_idCookie = req.session.user_id;
 
+  if(!user_idCookie){
+  res.redirect(`/login`)
+  }
+  
+  res.redirect(`/urls`)
 
 });
 

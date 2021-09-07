@@ -69,10 +69,10 @@ app.get('/', (req, res) => {
 
 });
 
-// Error Page
-app.get('/error', (req, res) => {
+// Login or Register Prompt Page
+app.get('/prompt', (req, res) => {
  
-  res.render('error', {userInfo: null});
+  res.render('prompt', {userInfo: null});
 
 });
 
@@ -83,7 +83,7 @@ app.get('/urls', (req, res) => {
 
   if (!user_idCookie) {
     
-    res.redirect('/error');
+    res.redirect('/prompt');
   }
 
   const userUrlDatabase = urlsForUser(user_idCookie, urlDatabase);
@@ -141,7 +141,7 @@ app.get('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
 
   if (!(user_idCookie === urlDatabase[shortURL].userID)) {
-    res.redirect('/error');
+    res.redirect('/prompt');
     
   }
 
@@ -196,6 +196,8 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   if (!(user_idCookie === urlDatabase[shortURL].userID)) {
 
     res.send('Access Denied');
+    return;
+
   }
 
   delete urlDatabase[shortURL];
@@ -226,7 +228,7 @@ app.post('/login', (req, res) => {
   if (!email || !password) {
     res.status(400);
     res.render('login_form', {
-      message: 'Cannot have empty email or password. Please try again:',
+      message: 'Cannot have empty email or password. Please try again.',
       userInfo: null
     });
     
@@ -295,8 +297,7 @@ app.post('/register', (req, res) => {
 
     res.status(400)
     res.render('registration', {
-      
-      message: 'Cannot have empty email or password. Please try again:',
+      message: 'Cannot have empty email or password. Please try again.',
       userInfo: null
     });
     

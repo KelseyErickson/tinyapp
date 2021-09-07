@@ -69,6 +69,12 @@ app.get('/', (req, res) => {
 
 });
 
+// Error Page
+app.get('/error', (req, res) => {
+ 
+  res.render('error', {userInfo: null});
+
+});
 
 // List of created urls
 app.get('/urls', (req, res) => {
@@ -76,8 +82,8 @@ app.get('/urls', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   if (!user_idCookie) {
-    res.send('Please login or register to view this page');
-    return;
+    
+    res.redirect('/error');
   }
 
   const userUrlDatabase = urlsForUser(user_idCookie, urlDatabase);
@@ -127,12 +133,7 @@ app.get('/urls/new', (req, res) => {
 
 
 });
-// Error Page
-app.get('/error', (req, res) => {
 
- res.render('error', {userInfo: null})
-
-});
 // Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
 
@@ -140,7 +141,7 @@ app.get('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
 
   if (!(user_idCookie === urlDatabase[shortURL].userID)) {
-    res.redirect('/error')
+    res.redirect('/error');
     
   }
 
@@ -208,7 +209,8 @@ app.get('/login', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   const templateVars = {
-    userInfo: users[user_idCookie]
+    userInfo: users[user_idCookie], 
+    message: null
   };
   res.render('login_form', templateVars);
 
@@ -222,22 +224,34 @@ app.post('/login', (req, res) => {
   const user = getUserByEmail(email, users);
 
   if (!email || !password) {
-
-    res.status(400).send('Error: Cannot have empty email or password');
-    return;
+    res.status(400);
+    res.render('login_form', {
+      message: 'Cannot have empty email or password. Please try again:',
+      userInfo: null
+    });
+    
+    
   }
 
 
   if (!user) {
-    res.status(403).send('Error: This email does not exist');
-    return;
+    res.status(403);
+    res.render('login_form', {
+      message: 'Email not Registered. Please register before logging in.',
+      userInfo: null
+    });
+    
 
   }
 
 
   if (!bcrypt.compareSync(password, user.password)) {
-
-    return res.status(403).send('Error: Incorrect Password');
+    res.status(403)
+    res.render('login_form', {
+      message: 'Incorrect Password. Please try again.',
+      userInfo: null
+    });
+    
   }
   
 
@@ -262,7 +276,8 @@ app.get('/register', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   const templateVars = {
-    userInfo: users[user_idCookie]
+    userInfo: users[user_idCookie], 
+    message: null
   };
 
   res.render('registration', templateVars);
@@ -278,16 +293,25 @@ app.post('/register', (req, res) => {
 
   if (!email || !password) {
 
-    res.status(400).send('Error: Cannot have empty email or password');
-    return;
+    res.status(400)
+    res.render('registration', {
+      
+      message: 'Cannot have empty email or password. Please try again:',
+      userInfo: null
+    });
+    
   }
 
   const user = getUserByEmail(email, users);
 
   if (user) {
-    res.status(400).send('Error: Email Already Registered');
-    return;
 
+    res.status(400);
+    res.render('registration', {
+      message: 'Email Already Registered. Please login.',
+      userInfo: null
+    });
+  
   }
 
   users[userRandomID] = {

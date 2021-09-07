@@ -127,7 +127,12 @@ app.get('/urls/new', (req, res) => {
 
 
 });
+// Error Page
+app.get('/error', (req, res) => {
 
+ res.render('error', {userInfo: null})
+
+});
 // Shows newly created URL
 app.get('/urls/:shortURL', (req, res) => {
 
@@ -135,8 +140,7 @@ app.get('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
 
   if (!(user_idCookie === urlDatabase[shortURL].userID)) {
-    res.send('Please login or register to view this page');
-    return;
+    res.redirect('/error')
     
   }
 

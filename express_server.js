@@ -67,9 +67,10 @@ app.get('/', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   if(!user_idCookie){
-  res.redirect(`/login`)
+    res.redirect(`/prompt`);
+    return;
   }
-  
+
   res.redirect(`/urls`)
 
 });
@@ -87,8 +88,8 @@ app.get('/urls', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   if (!user_idCookie) {
-    
     res.redirect('/prompt');
+    return;
   }
 
   const userUrlDatabase = urlsForUser(user_idCookie, urlDatabase);
@@ -130,8 +131,8 @@ app.get('/urls/new', (req, res) => {
   };
 
   if (!user_idCookie) {
-
     res.redirect('/login');
+    return;
   }
 
   res.render("urls_new", templateVars);
@@ -147,7 +148,7 @@ app.get('/urls/:shortURL', (req, res) => {
 
   if (!(user_idCookie === urlDatabase[shortURL].userID)) {
     res.redirect('/prompt');
-    
+    return;
   }
 
   const templateVars = {
@@ -167,8 +168,8 @@ app.post('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
 
   if (!(user_idCookie === urlDatabase[shortURL].userID)) {
-
     res.send('Access Denied');
+    return;
   }
 
   urlDatabase[shortURL].longURL = req.body.longURL;
@@ -237,7 +238,7 @@ app.post('/login', (req, res) => {
       userInfo: null
     });
     
-    
+    return;
   }
 
 
@@ -248,7 +249,7 @@ app.post('/login', (req, res) => {
       userInfo: null
     });
     
-
+    return;
   }
 
 
@@ -258,7 +259,8 @@ app.post('/login', (req, res) => {
       message: 'Incorrect Password. Please try again.',
       userInfo: null
     });
-    
+
+    return;
   }
   
 
@@ -305,7 +307,7 @@ app.post('/register', (req, res) => {
       message: 'Cannot have empty email or password. Please try again.',
       userInfo: null
     });
-    
+    return;
   }
 
   const user = getUserByEmail(email, users);
@@ -317,7 +319,7 @@ app.post('/register', (req, res) => {
       message: 'Email Already Registered. Please login.',
       userInfo: null
     });
-  
+    return;
   }
 
   users[userRandomID] = {

@@ -66,12 +66,12 @@ app.get('/', (req, res) => {
 
   const user_idCookie = req.session.user_id;
 
-  if(!user_idCookie){
+  if (!user_idCookie) {
     res.redirect(`/prompt`);
     return;
   }
 
-  res.redirect(`/urls`)
+  res.redirect(`/urls`);
 
 });
 
@@ -217,7 +217,7 @@ app.get('/login', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   const templateVars = {
-    userInfo: users[user_idCookie], 
+    userInfo: users[user_idCookie],
     message: null
   };
   res.render('login_form', templateVars);
@@ -254,7 +254,7 @@ app.post('/login', (req, res) => {
 
 
   if (!bcrypt.compareSync(password, user.password)) {
-    res.status(403)
+    res.status(403);
     res.render('login_form', {
       message: 'Incorrect Password. Please try again.',
       userInfo: null
@@ -263,10 +263,8 @@ app.post('/login', (req, res) => {
     return;
   }
   
-
   req.session.user_id = user.id;
   res.redirect('/urls');
-
 
 });
 
@@ -285,7 +283,7 @@ app.get('/register', (req, res) => {
   const user_idCookie = req.session.user_id;
 
   const templateVars = {
-    userInfo: users[user_idCookie], 
+    userInfo: users[user_idCookie],
     message: null
   };
 
@@ -302,7 +300,7 @@ app.post('/register', (req, res) => {
 
   if (!email || !password) {
 
-    res.status(400)
+    res.status(400);
     res.render('registration', {
       message: 'Cannot have empty email or password. Please try again.',
       userInfo: null

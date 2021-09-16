@@ -22,8 +22,7 @@
       <h4>Login</h4>
     </div>
     <% if (message) { %>
-
-      <p style="color: red"><%= message %></p>
+      <span style="color: red"><%= message %></span>
       <% } %>
     <div class="form-group">
       <form action="/login" method="POST">
